@@ -4,3 +4,9 @@ export type Contact = {
     name: string;
     lastName: string;
 };
+
+export type Message = {
+    id: number;
+    text: string;
+    userId: number;
+  }

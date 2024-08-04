@@ -1,14 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-type Contact = {
-  id: number;
-  name: string;
-  lastName: string;
-};
+import { Contact } from '../Types/types';
 
 type ContactsState = {
   contacts: Contact[];
-};
+}
 
 const initialState: ContactsState = {
   contacts: [],
@@ -19,8 +14,11 @@ const contactsSlice = createSlice({
   initialState,
   reducers: {
     addContact: (state, action: PayloadAction<{ name: string; lastName: string }>) => {
+      const newId = state.contacts.length > 0 ? state.contacts[state.contacts.length - 1].id + 1 : 1;
+      const newUserId = state.contacts.length > 0 ? state.contacts[state.contacts.length - 1].userId + 1 : 1;
       const newContact: Contact = {
-        id: state.contacts.length,
+        id: newId,
+        userId: newUserId,
         name: action.payload.name,
         lastName: action.payload.lastName,
       };
@@ -30,5 +28,4 @@ const contactsSlice = createSlice({
 });
 
 export const { addContact } = contactsSlice.actions;
-
 export default contactsSlice.reducer;

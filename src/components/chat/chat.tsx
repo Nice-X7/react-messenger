@@ -1,19 +1,23 @@
-import React, { useEffect, useRef, useState } from "react";
-import { RootState, AppDispatch } from "../../redux";
-import { addMessage } from "../../redux/ChatSlice";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useRef, useState } from 'react';
+import { RootState, AppDispatch } from '../../redux';
+import { addMessage } from '../../redux/ChatSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
-const Chat: React.FC = () => {
+type ChatProps = {
+  userId: number;
+};
+
+const Chat: React.FC<ChatProps> = ({ userId }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const messages = useSelector((state: RootState) => state.chat.message);
-  const [messageText, setMessageText] = useState("");
+  const messages = useSelector((state: RootState) => state.chat.message.filter(msg => msg.userId === userId));
+  const contact = useSelector((state: RootState) => state.contacts.contacts.find(contact => contact.userId === userId));
+  const [messageText, setMessageText] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
-  const messengerRef = useRef<HTMLDivElement>(null);
 
   const handleSendMessage = (): void => {
-    if (messageText.trim() !== "") {
-      dispatch(addMessage(messageText));
-      setMessageText("");
+    if (messageText.trim() !== '') {
+      dispatch(addMessage({ text: messageText, userId }));
+      setMessageText('');
 
       if (inputRef.current) {
         inputRef.current.focus();
@@ -22,29 +26,27 @@ const Chat: React.FC = () => {
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       handleSendMessage();
     }
   };
 
-  useEffect(() => {
-    if (messengerRef.current) {
-      messengerRef.current.scrollTop = messengerRef.current.scrollHeight;
-    }
-  }, [messages]);
+  if (!contact) {
+    return <div className='select_user'>Контакт не найден</div>;
+  }
 
   return (
     <div className="chat">
       <div className="user_title">
-        <h2>Пользователь</h2>
+        <h2>{contact.name} {contact.lastName}</h2>
       </div>
       <div className="messages">
         <div className="conversation">
-          <div className="messenger" ref={messengerRef}>
+          <div className="messenger">
             {messages.map((msg) => (
-              <div className="message" key={msg.id}>
+              <span className="message" key={msg.id}>
                 {msg.text}
-              </div>
+              </span>
             ))}
           </div>
           <input

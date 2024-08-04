@@ -1,10 +1,9 @@
 .contacts {
-  width: 15%;
   background: linear-gradient(to bottom right, #33ccff 0%, #ff99cc 100%);
   box-shadow: -1px 8px 10px 4px #000;
   border-radius: 6px;
   height: 100%;
-  width: 350px;
+  width: 300px;
   padding: 0 20px;
   display: flex;
   transition: width 0.3s ease;
@@ -26,7 +25,7 @@
   .unravel {
     color: #fff;
     font-size: 34px;
-    margin: 20px 20px 0 20px;
+    margin: 20px 0 0 10px;
     background: transparent;
     height: 40px;
     cursor: pointer;
@@ -40,7 +39,7 @@
     margin-top: 20px;
     padding: 10px 20px;
     height: 50px;
-    width: 260px;
+    width: 270px;
     border: none;
     border-radius: 6px;
     cursor: pointer;

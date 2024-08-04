@@ -1,37 +1,28 @@
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Message } from '../Types/types';
 
-type Message = {
-  id: number,
-  text: string
+type ChatState = {
+  message: Message[];
 }
 
-type Chat = {
-    displayChat: boolean
-    message: Message[]
-}
+const initialState: ChatState = {
+  message: [],
+};
 
-const initialState: Chat = {
-    displayChat: true,
-    message: []
-}
-
-export const chatSlice = createSlice({
+const chatSlice = createSlice({
   name: 'chat',
   initialState,
   reducers: {
-    isDisplayChat(state) {
-        state.displayChat = !state.displayChat
+    addMessage: (state, action: PayloadAction<{ text: string; userId: number }>) => {
+      const newMessage: Message = {
+        id: state.message.length > 0 ? state.message[state.message.length - 1].id + 1 : 1,
+        text: action.payload.text,
+        userId: action.payload.userId,
+      };
+      state.message.push(newMessage);
     },
-    addMessage(state, action: PayloadAction<string>) {
-      const newMessage = {
-        id: state.message.length,
-        text: action.payload
-      }
-      state.message.push(newMessage)
-    }
   },
-})
+});
 
-export const { isDisplayChat, addMessage } = chatSlice.actions
-export default chatSlice.reducer
+export const { addMessage } = chatSlice.actions;
+export default chatSlice.reducer;
